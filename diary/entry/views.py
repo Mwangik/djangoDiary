@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 
+from .forms import EntryForm
 from .models import Entry
 
 def index(request):
@@ -10,4 +11,17 @@ def index(request):
     return render(request, 'entry/index.html',context)
 
 def add(request):
-    return render(request, 'entry/add.html')
+    if request.method=='POST':
+        form = EntryForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect('index')
+    else:
+        form = EntryForm()
+
+    context={
+        'form':form
+    }
+
+    return render(request, 'entry/add.html',context)
