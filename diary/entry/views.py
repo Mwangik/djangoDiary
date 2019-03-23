@@ -1,8 +1,13 @@
 from django.shortcuts import render
-from . import templates
+
+from .models import Entry
 
 def index(request):
-    return render(request, 'entry/index.html')
+    entries = Entry.objects.order_by('-id')
+    context = {
+        'entries':entries,
+    }
+    return render(request, 'entry/index.html',context)
 
 def add(request):
     return render(request, 'entry/add.html')
